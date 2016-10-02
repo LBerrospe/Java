@@ -38,7 +38,7 @@ public class UI {
 			public void run() {
 				try {
 					UI window = new UI();
-					String ruta="C:\\Users\\Lalo\\workspace\\Compiladores 2016B\\test2.txt";
+					String ruta="/home/elle/Desktop/test.txt";
 					AnalizadorSintactico as = new AnalizadorSintactico(ruta, window);
 					as.programa();
 					window.frmEditcpas.setVisible(true);

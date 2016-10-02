@@ -19,10 +19,10 @@ public class AnalizadorLexico extends Errores{
 						ERR=-1, ACP=99;
 	private final int TAM_CODIGO_FUENTE;	
 	private final String[] PALABRA_RESERVADA= {
-						   "cadena", "caso", "constante", "de", "decimal", "desde",
-						   "en", "entero", "fin", "funcion", "hasta", "haz", "imprime", "imprimenl",
-						   "inicio", "interrumpe", "lee", "logico", "mientras", "notipo", "opcion",
-						   "otro", "para", "principal", "procedimiento","programa", "regresa", "si", "sino"
+						   "caso", "constante", "de", "decimal", "desde",
+						   "entero", "fin", "funcion", "hasta", "haz", "imprime", "imprimenl",
+						   "inicio", "interrumpe", "lee", "logico", "mientras", "opcion",
+						   "otro", "para", "procedimiento","programa", "regresa", "si", "sino"
 						   };
 	private final String[] CONSTANTE_LOGICA= {
 						   "falso", "verdadero"
@@ -224,13 +224,14 @@ public class AnalizadorLexico extends Errores{
 				case 20:	token="cteAlf";	break;
 				case 8:		//COMENTARIOS case 8 y 12
 				case 12: 	token=""; lexema.delete(0, lexema.length());	break;
-				}//switch
+				}//switch`
 			} else {
 				estado=ERR;
 				error(ERR_LEX, ERR_LEX_INF, numeroLinea, lexema.toString());
 				index = TAM_CODIGO_FUENTE;
 			}//if{}else{}
-		}//while (indice < tamanoCodigoFuente)	
+		}//while (indice < tamanoCodigoFuente)
+		System.out.println(lexema.toString());
 		return lexema.toString();
 	}//escanear
 	

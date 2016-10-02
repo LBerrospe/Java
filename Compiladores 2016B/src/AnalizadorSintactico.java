@@ -15,6 +15,7 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 	}//Constructor
 
 	void programa() {
+		System.out.println("Ya va empezar");
 		al.escanear();
 		if ( !al.obtenerLexema().equals("programa")) {
 			error(ERR_SIN, ERR_PGR, al.obtenerNumeroLinea(), al.obtenerLexema()); return;
@@ -184,14 +185,14 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 	
 	void funcion(){
 		al.escanear();
+		if ( !(al.obtenerLexema().equals("entero") || al.obtenerLexema().equals("decimal") ||
+			   al.obtenerLexema().equals("alfabetico") || al.obtenerLexema().equals("logico")) ){
+				error(ERR_SIN, ERR_FNC, al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+		}//si no es un tipo de dato es error
+		al.escanear();
 		if ( !al.obtenerToken().equals("identi")) {
 			error(ERR_SIN, ERR_FNC, al.obtenerNumeroLinea(), al.obtenerLexema()); return;
 		}//si no es identi
-		al.escanear();
-		if ( !(al.obtenerLexema().equals("entero") || al.obtenerLexema().equals("decimal") ||
-			   al.obtenerLexema().equals("alfabetico") || al.obtenerLexema().equals("logico")) ){
-			error(ERR_SIN, ERR_FNC, al.obtenerNumeroLinea(), al.obtenerLexema()); return;
-		}//si no es un tipo de dato es error
 		al.escanear();
 		parametros();
 		while ( !al.obtenerLexema().equals("inicio")) {
@@ -199,7 +200,8 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 				 al.obtenerLexema().equals("alfabetico") || al.obtenerLexema().equals("logico") ) {
 				variable();
 			} else {
-				error(ERR_SIN, ERR_PCS, al.obtenerNumeroLinea(), al.obtenerLexema()); return;	
+				error(ERR_SIN, ERR_PCS, al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+				
 			}//if{}else{}
 		}//Mientras no sea inicio
 		al.escanear();
@@ -229,7 +231,7 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 		al.escanear();	
 		while ( !al.obtenerLexema().equals(")")) {
 			if ( !(al.obtenerLexema().equals("entero") || al.obtenerLexema().equals("decimal") ||
-					   al.obtenerLexema().equals("alfabetico") || al.obtenerLexema().equals("logico")) ){
+				   al.obtenerLexema().equals("alfabetico") || al.obtenerLexema().equals("logico")) ){
 					error(ERR_SIN, "ERR_PAR", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
 				}//if
 				al.escanear();
@@ -256,6 +258,16 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 					error(ERR_SIN, "ERR_INSTRUCCION", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
 				}//si no es ; entonces es un error
 				al.escanear();
+			} else if ( al.obtenerLexema().equals("[")) {
+				declararVector();
+				 if ( al.obtenerLexema().equals("=")){
+					 al.escanear();
+					 asignacion();
+					 if ( !al.obtenerLexema().equals(";")){
+						error(ERR_SIN, "ERR_INSTRUCCION", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+					}//si no es ; entonces es un error
+					al.escanear();
+					}//si se va a igualar
 			} else if ( al.obtenerLexema().equals("=")){
 				al.escanear();
 				asignacion();
@@ -263,18 +275,6 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 					error(ERR_SIN, "ERR_INSTRUCCION", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
 				}//si no es ; entonces es un error
 				al.escanear();
-			} else if ( al.obtenerLexema().equals("[")) {
-				declararVector();
-				 if ( al.obtenerLexema().equals("=")){ 
-					 al.escanear();
-					 System.out.println("entro de asignacion con: "+al.obtenerLexema());
-					asignacion();
-					System.out.println("salio de asignacion con: "+al.obtenerLexema());
-					if ( !al.obtenerLexema().equals(";")){
-						error(ERR_SIN, "ERR_INSTRUCCION", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
-					}//si no es ; entonces es un error
-					al.escanear();
-					}//si se va a igualar
 			} else {
 				error(ERR_SIN, "ERR_INSTRUCCION", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
 			}//if{}else if{}else if{} else {}
@@ -283,6 +283,7 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 			case "si": instruccionSi(); break;	//BUENA :D
 			case "para": instruccionPara(); break;
 			case "mientras": instruccionMientras(); break;
+			case "haz": instruccionHaz(); break;
 			case "regresa": instruccionRegresa(); break;
 			default: error(ERR_SIN, "ERR_INSTRUCCION EN SWITCH"+al.obtenerToken(),  al.obtenerNumeroLinea(), al.obtenerLexema()); return;
 			}//switch	
@@ -373,6 +374,69 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 		al.escanear();
 		cuerpoInstruccion();
 	}//mientras
+	
+	void instruccionHaz() {
+		al.escanear();
+		if ( !al.obtenerLexema().equals("opcion")) {
+			error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+		}//si no es opcion
+		al.escanear();
+		if ( !al.obtenerLexema().equals("(")) {
+			error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+		}//si no es ( es un error
+		al.escanear();
+		if ( !al.obtenerToken().equals("identi")) {
+			error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+		}//si no es identificador es error
+		al.escanear();
+		if ( !al.obtenerLexema().equals(")")) {
+			error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+		}//si no es ) es un error
+		al.escanear();
+		if ( !al.obtenerLexema().equals("inicio")) {
+			error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+		}//si no es inicio entonces es un error
+		al.escanear();
+		while ( !(al.obtenerLexema().equals("fin") || al.obtenerLexema().equals("otro"))) {
+			if ( !al.obtenerLexema().equals("caso")) {
+				error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+			}//si no es caso entonces es error
+			al.escanear();
+			if (!(al.obtenerToken().equals("identi") || al.obtenerToken().equals("cteEnt") ||
+				  al.obtenerToken().equals("cteDec") || al.obtenerToken().equals("cteAlf") ||
+				  al.obtenerToken().equals("cteLog"))) {
+				error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+			}//si no es cte o identi es un error
+			al.escanear();
+			if ( !al.obtenerLexema().equals(":")) {
+				error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+			}//si no es : es un error
+			al.escanear();
+			while ( !(al.obtenerLexema().equals("caso") || al.obtenerLexema().equals("fin") ||
+					  al.obtenerLexema().equals("otro"))) {
+				instruccion();
+			}//mientras sea diferente de caso
+		}//si no es fin | otro
+		if ( al.obtenerLexema().equals("otro")) {
+			al.escanear();
+			if ( !al.obtenerLexema().equals("caso")) {
+				error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+			}//si no es 
+			al.escanear();
+			if ( !al.obtenerLexema().equals(":")) {
+				error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+			}//si no es : es un error
+			al.escanear();
+			while ( !al.obtenerLexema().equals("fin")) {
+				instruccion();
+			}//mientras sea diferente de caso
+		}//si es otro entonces haz el bloque
+		al.escanear();
+		if ( !al.obtenerLexema().equals(";")) {
+			error(ERR_SIN, "ERR_HAZ", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
+		}//si no es ; es un error
+		al.escanear();
+	}//instruccionHaz
 
 	void cuerpoInstruccion() {
 		if ( !al.obtenerLexema().equals("inicio")) {
@@ -398,10 +462,6 @@ public class AnalizadorSintactico extends AnalizadorLexico{
 				al.escanear();
 			} else if (al.obtenerLexema().equals("[")) {
 				declararVector();
-				if (!al.obtenerLexema().equals(";")) {
-					error(ERR_SIN, "ERR_ASI", al.obtenerNumeroLinea(), al.obtenerLexema()); return;
-				}//si el siguiente token no es ; es error
-				al.escanear();
 			}//if{}else if{}
 		} else if (al.obtenerToken().equals("cteAlf") || al.obtenerToken().equals("cteDec") ||
 				   al.obtenerToken().equals("cteEnt") || al.obtenerToken().equals("cteLog")) {

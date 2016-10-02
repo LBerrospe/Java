@@ -31,29 +31,29 @@ public class AnalizadorLexico extends UI{
 						   "no", "o", "y"
 						   };
 	private final short[][] MATRIZ_TRAN={
-	/*  _																, :	
-	   a-z										+ -						( )						tab
-	   A-Z 		dgt		 = 		 / 		 * 		^ %		< >		 ! 		[ ] ;	 . 		 " 		' '		nl		CC*/
-/* 0*/ { 1,		 2,		 5,		 7,		13,		13,		14,		16,		18,		18,		19,		21,		21,		ERR},
-/* 1*/ { 1,		 1,		ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/* 2*/ {ACP,	 2,		ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	 3,		ACP,	ACP,	ACP,	ACP},
-/* 3*/ {ERR,	 4,		ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR},
-/* 4*/ {ACP,	 4,		ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/* 5*/ {ACP,	ACP,	 6,		ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
+	/*_											, :	
+	 a-z					+ -						( )	tab
+	 A-Z 	dgt	 = 	 / 	 * 	^ %	< >	 ! 	[ ] ;	 . 	 " 	' '	nl	CC*/
+/* 0*/ { 1,	 2,	 5,	 7,	13,	13,	14,	16,	18,	18,	19,	21,	21,	ERR},
+/* 1*/ { 1,	 1,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
+/* 2*/ {ACP,	 2,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	 3,	ACP,	ACP,	ACP,	ACP},
+/* 3*/ {ERR,	 4,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR},
+/* 4*/ {ACP,	 4,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
+/* 5*/ {ACP,	ACP,	 6,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
 /* 6*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/* 7*/ {ACP,	ACP,	ACP,	 8,		10,		ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/* 8*/ { 8,		 8,		 8,		 8,		 8,		 8,		 8,		 8,		 8,		 8,		 8,		 8,		 9,		 8 },
+/* 7*/ {ACP,	ACP,	ACP,	 8,	10,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
+/* 8*/ { 8,	 8,	 8,	 8,	 8,	 8,	 8,	 8,	 8,	 8,	 8,	 8,	 9,	 8 },
 /* 9*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/*10*/ {10,		10,		10,		10,		11,		10,		10,		10,		10,		10,		10,		10,		10,		10 },
-/*11*/ {10,		10,		10,		12,		11,		10,		10,		10,		10,		10,		10,		10,		10,		10 },
+/*10*/ {10,	10,	10,	10,	11,	10,	10,	10,	10,	10,	10,	10,	10,	10 },
+/*11*/ {10,	10,	10,	12,	11,	10,	10,	10,	10,	10,	10,	10,	10,	10 },
 /*12*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
 /*13*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/*14*/ {ACP,	ACP,	15,		ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
+/*14*/ {ACP,	ACP,	15,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
 /*15*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/*16*/ {ERR,	ERR,	17,		ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR},
+/*16*/ {ERR,	ERR,	17,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR,	ERR},
 /*17*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
 /*18*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
-/*19*/ {19, 	19, 	19, 	19, 	19, 	19, 	 19,	19, 	19, 	19, 	20,		 19,	19 ,	19 },
+/*19*/ {19, 	19, 	19, 	19, 	19, 	19, 	 19,	19, 	19, 	19, 	20,	 19,	19 ,	19 },
 /*20*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
 /*21*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP} };
 /**

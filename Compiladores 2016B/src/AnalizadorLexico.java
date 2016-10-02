@@ -7,12 +7,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class AnalizadorLexico extends UI{
+public class AnalizadorLexico extends Errores{
 	UI userInterface=null;
 	private String codigoFuente="";
 	private StringBuilder lexema = new StringBuilder();
 	private int index=0;
-	static int numeroLinea=1;
+	private int numeroLinea=1;
 	private String token="";
 	private short estado=0, estadoAnterior=-1, columna=0;
 	private final short NUM_PAL_RES=29, NUM_CTE_LOG=2, NUM_OPE_LOG=3, COLUMNA_INICIAL=0, COLUMNA_FINAL=13, 
@@ -56,36 +56,13 @@ public class AnalizadorLexico extends UI{
 /*19*/ {19, 	19, 	19, 	19, 	19, 	19, 	 19,	19, 	19, 	19, 	20,	 19,	19 ,	19 },
 /*20*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP},
 /*21*/ {ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP,	ACP} };
-/**
- * ERRORES POSIBLES
- */
-	//ERRORES LEXICOS
-	public final String ERR_LEX="lexico.", ERR_LEX_INF="secuencia de caracteres invalidos.";
-	//ERRORES SINTACTICOS
-	public final String ERR_SIN="sintactico", 
-	  		 ERR_PGR="sintaxis incorrecta.\nprograma <identi> [<constantes>][<variables>][<procesos>|<funciones>] inicio [<block>] fin de programa.",
-	  		 ERR_CTE="sintaxis incorrecta.\nconstante <entero>|<decimal>|<alfabetico>|<logico> (<identi> = <cteLog>|<cteAlf>|<cteEnt>|<cteDec>)+ ;",
-	  		 ERR_PCS="sintaxis incorrecta.\nprocedimiento <identi> \"(\" (<entero>|<decimal>|<alfabetico>|<logico> <identi> [,])* \")\" [<variables>] inicio [<bloque>] fin de <identi> ;", 
-	  		 ERR_VAR="sintaxis incorrecta.\n<entero>|<decimal>|<alfabetico>|<logico> (<identi> [= <cteLog>|<cteAlf>|<cteEnt>|<cteDec>][,])+ ;", 
-	  		 ERR_FNC="sintaxis incorrecta.\nfuncion <entero>|<decimal>|<alfabetico>|<logico><identi> \"(\" (<entero>|<decimal>|<alfabetico>|<logico> <identi> [,])* \")\" [<variables>] inicio [<bloque>] regresa <cteLog>|<cteAlf>|<cteEnt>|<cteDec>; fin de <identi>;", 
-	  		 ERR_BLQ="sintaxis incorrecta.\n";
-	//ERRORES SEMANTICOS
-	public final String ERR_SEM="semantico", 
-			ERR_SEM_VAR="variable usada, no definida o operando incompatible",
-			ERR_SEM_VAL="conversion de tipo invalido";
+
 	
 	public AnalizadorLexico (String rutaArchivo, UI userInterface) {
+		super(userInterface);
 		codigoFuente=leerArchivo(rutaArchivo);
-		this.txtrConsola=userInterface.txtrConsola;
 		TAM_CODIGO_FUENTE=codigoFuente.length();
 	}//Constructor
-	
-	public void error( String tipo, String informacion, String lexema) {
-		txtrConsola.append("Tipo: "+tipo+"\n");
-		txtrConsola.append("Numero linea: "+numeroLinea+"\n");
-		txtrConsola.append("Informacion: "+informacion+"\n");
-		txtrConsola.append("Cerca de: "+lexema+"\n");
-	}//error
 	
 	public int obtenerNumeroLinea() {
 		return numeroLinea;
@@ -250,11 +227,10 @@ public class AnalizadorLexico extends UI{
 				}//switch
 			} else {
 				estado=ERR;
-				error(ERR_LEX, ERR_LEX_INF, lexema.toString());
+				error(ERR_LEX, ERR_LEX_INF, numeroLinea, lexema.toString());
 				index = TAM_CODIGO_FUENTE;
 			}//if{}else{}
 		}//while (indice < tamanoCodigoFuente)	
-		System.out.println(lexema.toString());
 		return lexema.toString();
 	}//escanear
 	

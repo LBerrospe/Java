@@ -2,15 +2,15 @@
  * @author Lalo Berrospe
  * @class Power
  * @description Calculates the power of any number,	it will prompt 
- * the user base and power ( both integer ).
+ * 		the user base and power ( both integer ).
  * @date Thu 7 Jul 2016
  */
 import java.util.Scanner;
 
 public class Power {
 	public static void main(String[] args) {
-		int base = 0;				//Number that will be power
-		int exponent = 0;			//Exponent value
+		int base = 0;			
+		int exponent = 0;		
 		double resPow = 1;			//Result from number raised to power
 		Scanner sc = null;
 		sc  = new Scanner(System.in);

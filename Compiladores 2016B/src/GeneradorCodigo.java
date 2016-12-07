@@ -41,14 +41,14 @@ public class GeneradorCodigo {
 		i++; //(
 		i++; 
 		while (!s[i].equals(")")){
-			params+="¤"+s[i];
+			params+="Â¤"+s[i];
 			i++;
 			if (s[i].equals(",")){
-				generarCodigoExpresion(params.replace('|', '¤'),as,asm);
+				generarCodigoExpresion(params.replace('|', 'Â¤'),as,asm);
 				i++;
 				params="";
 			} else if (s[i].equals(")")) {
-				generarCodigoExpresion(params.replace('|', '¤'),as,asm);
+				generarCodigoExpresion(params.replace('|', 'Â¤'),as,asm);
 				params="";
 			}//if{}elseif{}
 		}//while
@@ -64,7 +64,7 @@ public class GeneradorCodigo {
 		i++; //[
 		i++; 
 		while (!s[i].equals("]")){
-			expresion+="¤"+s[i];
+			expresion+="Â¤"+s[i];
 			i++;
 			if (s[i].equals("]")){
 				generarCodigoExpresion(expresion,as,asm);
@@ -80,13 +80,13 @@ public class GeneradorCodigo {
 	
 	void generarCodigoExpresion(String expresionInfija, AnalizadorSintactico as, AnalizadorSemantico asm) {
 		String expresionPostfija = asm.infijaAPostfija(expresionInfija);
-		for (String s: expresionPostfija.split("¤")) {
+		for (String s: expresionPostfija.split("Â¤")) {
 			if (asm.prioridadOperador(s) == -1 && !(s.equals(""))) {
 				if (s.startsWith("_")) {
 					generarCodigo("LIT", s.substring(1), "0");
-				} else if(s.startsWith("ƒ")){
+				} else if(s.startsWith("Æ’")){
 					generarCodigoFuncion(s.substring(1),as,asm);
-				} else if (s.startsWith("£")){
+				} else if (s.startsWith("Â£")){
 					generarCodigoVector(s.substring(1),as,asm);
 				} else {
 					generarCodigo("LOD", s, "0");
@@ -95,20 +95,21 @@ public class GeneradorCodigo {
 				generarCodigo("OPR", "0", "17");
 			} else {
 				switch (s) {
-				case "+":	generarCodigo("OPR", "0", "2");	break;
-				case "-":	generarCodigo("OPR", "0", "3");	break;
-				case "*":	generarCodigo("OPR", "0", "4");	break;
-				case "/":	generarCodigo("OPR", "0", "5");	break;
-				case "%":	generarCodigo("OPR", "0", "6");	break;
-				case "^":	generarCodigo("OPR", "0", "7");	break;
-				case "<":	generarCodigo("OPR", "0", "9");	break;
+				case "+":	generarCodigo("OPR", "0", "2");		break;
+				case "-":	generarCodigo("OPR", "0", "3");		break;
+				case "*":	generarCodigo("OPR", "0", "4");		break;
+				case "/":	generarCodigo("OPR", "0", "5");		break;
+				case "%":	generarCodigo("OPR", "0", "6");		break;
+				case "^":	generarCodigo("OPR", "0", "7");		break;
+				case "<":	generarCodigo("OPR", "0", "9");		break;
 				case ">":	generarCodigo("OPR", "0", "10");	break;
 				case "<=":	generarCodigo("OPR", "0", "11");	break;
 				case ">=":	generarCodigo("OPR", "0", "12");	break;
 				case "!=":	generarCodigo("OPR", "0", "13");	break;
 				case "==":	generarCodigo("OPR", "0", "14");	break;
-				case "y":	generarCodigo("OPR", "0", "15");	break;
-				case "o":	generarCodigo("OPR", "0", "16");	break;
+				case "o":	generarCodigo("OPR", "0", "15");	break;
+				case "y":	generarCodigo("OPR", "0", "16");	break;
+				
 				}//switch
 			}//if{}else{}elseif{}
 		}//for

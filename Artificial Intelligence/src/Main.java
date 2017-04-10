@@ -56,6 +56,7 @@ public class Main {
 		while (!s.isEmpty()) {
 			node=s.pop();
 			setRobotPosition(node.getRow(), node.getColumn());
+			node.nodeToString();
 		}//while
 	}//moveAgent
 	
@@ -63,24 +64,12 @@ public class Main {
 		setLandscapeSize();
 		setInitialRobotPosition();
 		Node n=null;
-//		Tree tree = new Tree(row, column, landscape);
-//		tree.nextDepth();
-//		while (n != null) {
-//			n=tree.nextDepth();
-//		}//while
-		n = new Node(null, "A", row, column, landscape);
-
-		landscape[row+1][column]=true;
-		Node c = new Node(n, "B", row+1, column, landscape);
-		
-		landscape[row][column+1]=true;
-		Node c2 = new Node(n, "C", row, column+1, landscape);
-		
-		n.nodeToString();
-		c.nodeToString();
-		c2.nodeToString();
-		
-		//moveRobot(getPath(n));		
+		Tree tree = new Tree(row, column, landscape);
+		while (n == null) {
+			n=tree.nextDepth();
+		}//while
+		System.out.println("Problem solved....");
+		moveRobot(getPath(n));		
 	}//start
 	
 	public static void main(String[] args) {

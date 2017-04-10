@@ -102,11 +102,6 @@ public class Tree {
 		}//for row
 		return sb.toString();
 	}//generateUniqueId
-	
-	public boolean[][] setDiscoveredRegion(boolean[][] landscape, int row, int column) {
-		landscape[row][column]=true;
-		return landscape;
-	}//setDiscoveredRegion
 
 	public Node successorFunctionReachedGoal(Node node){
 		Node child=null;
@@ -116,8 +111,10 @@ public class Tree {
 		boolean[][] landscape=node.getLandscape();
 		
 		if ((state = conditionActionRules(UP, row, column,landscape)) != null) {
-			System.out.println("Entre al UP ");
-			child = new Node(node, state, row-1, column, setDiscoveredRegion(landscape,row-1,column));
+			System.out.println("UP ");
+			landscape[row-1][column]=true;
+			child = new Node(node, state, row-1, column, landscape);
+			landscape[row-1][column]=false;
 			node.addChild(child);
 			nextQueue.add(child);
 			child.nodeToString();
@@ -126,10 +123,12 @@ public class Tree {
 			}//if{}
 		}//if{}
 		
-		node.nodeToString();
+
 		if ((state = conditionActionRules(RIGHT, row, column,landscape)) != null) {
-			System.out.println("Entre al RIGHT ");
-			child = new Node(node, state, row, column+1, setDiscoveredRegion(landscape,row,column+1));
+			System.out.println("RIGHT ");
+			landscape[row][column+1]=true;
+			child = new Node(node, state, row, column+1, landscape);
+			landscape[row][column+1]=false;
 			node.addChild(child);
 			nextQueue.add(child);
 			child.nodeToString();
@@ -139,8 +138,10 @@ public class Tree {
 		}//if{}
 		
 		if ((state = conditionActionRules(DOWN, row, column,landscape)) != null) {
-			System.out.println("Entre al DOWN ");
-			child = new Node(node, state, row+1, column, setDiscoveredRegion(landscape,row+1,column));
+			System.out.println("DOWN ");
+			landscape[row+1][column]=true;
+			child = new Node(node, state, row+1, column, landscape);
+			landscape[row+1][column]=false;
 			node.addChild(child);
 			nextQueue.add(child);
 			child.nodeToString();
@@ -150,8 +151,10 @@ public class Tree {
 		}//if{}
 		
 		if ((state = conditionActionRules(LEFT, row, column,landscape)) != null) {
-			System.out.println("Entre al LEFT ");
-			child = new Node(node, state, row, column-1, setDiscoveredRegion(landscape,row,column-1));
+			System.out.println("LEFT ");
+			landscape[row][column-1]=true;
+			child = new Node(node, state, row, column-1, landscape);
+			landscape[row][column-1]=false;
 			node.addChild(child);
 			nextQueue.add(child);
 			child.nodeToString();
@@ -164,7 +167,7 @@ public class Tree {
 	
 	public Node nextDepth() {
 		Node n=null;
-		while (!queue.isEmpty()) {
+		while (!queue.isEmpty() && n == null) {
 			n = successorFunctionReachedGoal(queue.remove());
 		}//while
 		queue = nextQueue;

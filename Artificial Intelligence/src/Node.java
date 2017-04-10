@@ -4,7 +4,7 @@ public class Node {
 	Node parent=null;
 	private String state=null;
 	private int row=0, column=0;
-	private boolean landscape[][]=null;
+	private boolean[][] landscape=null;
 	private boolean reachedGoal=false;
 	private ArrayList<Node> children=null;
 	
@@ -14,7 +14,9 @@ public class Node {
 		this.state=state;
 		this.row=row;
 		this.column=column;
-		this.landscape=landscape;
+		this.landscape= new boolean[landscape.length][];
+		for(int i=0; i<landscape.length; i++)
+			this.landscape[i]=landscape[i].clone();
 		this.reachedGoal=verifyReachedGoal();
 		children = new ArrayList<Node>();
 	}//Constructor

@@ -17,21 +17,21 @@ public class Main {
 	
 	public void setLandscapeSize() {
 		System.out.println("Type the size of the landscape.");
-		System.out.print("# columns: ");
-		landscapeColumn = input.nextInt();
 		System.out.print("# rows: ");
 		landscapeRow = input.nextInt();
-		
+		System.out.print("# columns: ");
+		landscapeColumn = input.nextInt();
 		
 		landscape = new boolean[landscapeRow][landscapeColumn];
 	}//setLandscapeSize
 	
 	public void setInitialRobotPosition() {
 		System.out.println("Type robot's position.");
+		System.out.print("Row: ");
+		row=input.nextInt();
 		System.out.print("Column: ");
 		column=input.nextInt();
-		System.out.print("Y: ");
-		row=input.nextInt();
+
 		
 		landscape[row][column]=true;
 	}//setRobotPosition()
@@ -57,6 +57,7 @@ public class Main {
 			node=s.pop();
 			setRobotPosition(node.getRow(), node.getColumn());
 			node.nodeToString();
+			System.out.println("");
 		}//while
 	}//moveAgent
 	
@@ -68,7 +69,9 @@ public class Main {
 		while (n == null) {
 			n=tree.nextDepth();
 		}//while
-		System.out.println("Problem solved....");
+		System.out.println("**********************************************");
+		System.out.println("       Problem solved....");
+		System.out.println("**********************************************");
 		moveRobot(getPath(n));		
 	}//start
 	

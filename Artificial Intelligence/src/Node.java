@@ -21,45 +21,23 @@ public class Node {
 		children = new ArrayList<Node>();
 	}//Constructor
 	
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
+	public String getState() {		return state;	}
+	public void setState(String state) {	this.state = state;	}
 	
-	public int getRow() {
-		return row;
-	}
+	public int getRow() {	return row;	}
+	public void setRow(int row) {	this.row = row;	}
 
-	public void setRow(int row) {
-		this.row = row;
-	}
+	public int getColumn() {	return column;	}
+	public void setColumn(int column) {	this.column = column;	}
 
-	public int getColumn() {
-		return column;
-	}
-
-	public void setColumn(int column) {
-		this.column = column;
-	}
-
-	public boolean[][] getLandscape() {
-		return landscape;
-	}
-
-	public void setLandscape(boolean[][] landscape) {
-		this.landscape = landscape;
-	}
+	public boolean[][] getLandscape() {	return landscape.clone();	}
+	public void setLandscape(boolean[][] landscape) {	this.landscape = landscape;	}
 	
-	public boolean isReachedGoal() {
-		return reachedGoal;
-	}//isreachedGoal
+//	public boolean getLandscapePosition(int row, int column) { return this.landscape[row][column];	}
+	
+	public boolean isReachedGoal() {	return reachedGoal;	}
 
-	public void addChild( Node child ) {
-		children.add(child);
-	}//addChild
+	public void addChild( Node child ) {	children.add(child);	}
 	
 	public boolean verifyReachedGoal() {
 		boolean flag=true;
@@ -75,7 +53,6 @@ public class Node {
 	}//verifyReachedGoal
 	
 	public void nodeToString() {
-		
 		if (parent != null) {
 			System.out.printf("Parent: ");
 			System.out.println(parent.state);
@@ -85,14 +62,18 @@ public class Node {
 		for (int i = 0; i < Main.landscapeRow; i++) {
 			for (int j = 0; j < Main.landscapeColumn; j++) {
 				if (this.landscape[i][j]) {
-					System.out.printf("%-4s","[ ]");	
+					if (i == row && j == column) {
+						System.out.printf("%-4s","[o]");
+					} else {
+						System.out.printf("%-4s","[ ]");	
+					}//if{}
+						
 				} else {
 					System.out.printf("%-4s","[x]");
 				}//if{}else{}
 			}
 			System.out.println("");
 		}
-		System.out.println("");
 	}//nodeToString
 
 }//Node

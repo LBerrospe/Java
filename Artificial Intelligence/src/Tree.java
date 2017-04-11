@@ -12,7 +12,6 @@ public class Tree {
 	public Tree(int row, int column, boolean[][] landscape) {
 		root = new Node(null, generateUniqueId(row, column, landscape), row, column, landscape);
 		queue.add(root);
-		root.nodeToString();
 	}//constructor
 	
 	public boolean isNewState(String idState) {
@@ -27,64 +26,56 @@ public class Tree {
 		return column >= 0 && column < Main.landscapeColumn;
 	}//isColumnValidMovement
 
-	public String conditionActionRules(int OPERATION, int row, int column, boolean[][] landscape) {
-		String state=null;
+	public Node conditionActionRules(int OPERATION, Node n) {
+		int row= n.getRow();
+		int column=n.getColumn();
+		boolean[][] landscape=n.getLandscape();
+		boolean flag=false;
+		
 		switch (OPERATION) {
 		case UP:
-			if (isRowValidMovement(row-1)) {
-				landscape[row-1][column]=true;
-				state=generateUniqueId(row-1, column, landscape);
-				if (isNewState(state)) {
-					return state;
-				} else {
-					return null;
-				}//if{}else{}
-			} else {
-				return null;
-			}//if{}else{}
+			row-=1;
+			flag=isRowValidMovement(row);
+			break;
 			
 		case RIGHT:
-			if (isColumnValidMovement(column+1)) {
-				landscape[row][column+1]=true;
-				state=generateUniqueId(row, column+1, landscape);
-				if (isNewState(state)) {
-					return state;
-				} else {
-					return null;
-				}//if{}else{}
-			} else {
-				return null;
-			}//if{}else{}
+			column+=1;
+			flag=isColumnValidMovement(column);
+			break;
 			
 		case DOWN:
-			if (isRowValidMovement(row+1)) {
-				landscape[row+1][column]=true;
-				state=generateUniqueId(row+1, column, landscape);
-				if (isNewState(state)) {
-					return state;
-				} else {
-					return null;
-				}//if{}else{}
-			} else {
-				return null;
-			}//if{}else{}
+			row+=1;
+			flag=isRowValidMovement(row);
+			break;
 			
 		case LEFT:
-			if (isColumnValidMovement(column-1)) {
-				landscape[row][column-1]=true;
-				state=generateUniqueId(row, column-1, landscape);
+			column-=1;
+			flag=isColumnValidMovement(column);
+			break;
+		}//switch
+
+		if (flag) {
+			if (landscape[row][column]) {
+				String state=generateUniqueId(row, column, landscape);
 				if (isNewState(state)) {
-					return state;
+					return new Node(n, state, row, column, landscape);
 				} else {
 					return null;
 				}//if{}else{}
 			} else {
-				return null;
-			}//if{}else{}
-			
-			default:
-				return null;
-		}//switch
+				landscape[row][column]=true;
+				String state=generateUniqueId(row, column, landscape);
+				if (isNewState(state)) {
+					Node newNode = new Node(n, state, row, column, landscape);
+					landscape[row][column]=false;
+					return newNode;
+				} else {
+					return null;
+				}//if{}else{}
+			}//if{}else{}			
+		} else {
+			return null;
+		}//if{}else{}
 	}//conditionActionRules
 	
 	private String generateUniqueId(int row, int column, boolean[][] landscape) {
@@ -105,30 +96,22 @@ public class Tree {
 
 	public Node successorFunctionReachedGoal(Node node){
 		Node child=null;
-		String state=null;
-		int row= node.getRow();
-		int column=node.getColumn();
-		boolean[][] landscape=node.getLandscape();
-		
-		if ((state = conditionActionRules(UP, row, column,landscape)) != null) {
-			System.out.println("UP ");
-			landscape[row-1][column]=true;
-			child = new Node(node, state, row-1, column, landscape);
-			landscape[row-1][column]=false;
-			node.addChild(child);
-			nextQueue.add(child);
-			child.nodeToString();
-			if (child.isReachedGoal()) {
-				return child;
-			}//if{}
-		}//if{}
-		
+		System.out.println("------------------- \nSuccesorFunction of");
+		node.nodeToString();
+		System.out.println("-------------------");
 
-		if ((state = conditionActionRules(RIGHT, row, column,landscape)) != null) {
+		if ((child = conditionActionRules(UP, node)) != null) {
+			System.out.println("UP ");
+			node.addChild(child);
+			nextQueue.add(child);
+			child.nodeToString();
+			if (child.isReachedGoal()) {
+				return child;
+			}//if{}
+		}//if{}
+		
+		if ((child = conditionActionRules(RIGHT,node)) != null) {
 			System.out.println("RIGHT ");
-			landscape[row][column+1]=true;
-			child = new Node(node, state, row, column+1, landscape);
-			landscape[row][column+1]=false;
 			node.addChild(child);
 			nextQueue.add(child);
 			child.nodeToString();
@@ -137,11 +120,8 @@ public class Tree {
 			}//if{}
 		}//if{}
 		
-		if ((state = conditionActionRules(DOWN, row, column,landscape)) != null) {
+		if ((child = conditionActionRules(DOWN, node)) != null) {
 			System.out.println("DOWN ");
-			landscape[row+1][column]=true;
-			child = new Node(node, state, row+1, column, landscape);
-			landscape[row+1][column]=false;
 			node.addChild(child);
 			nextQueue.add(child);
 			child.nodeToString();
@@ -150,11 +130,8 @@ public class Tree {
 			}//if{}
 		}//if{}
 		
-		if ((state = conditionActionRules(LEFT, row, column,landscape)) != null) {
+		if ((child = conditionActionRules(LEFT, node)) != null) {
 			System.out.println("LEFT ");
-			landscape[row][column-1]=true;
-			child = new Node(node, state, row, column-1, landscape);
-			landscape[row][column-1]=false;
 			node.addChild(child);
 			nextQueue.add(child);
 			child.nodeToString();

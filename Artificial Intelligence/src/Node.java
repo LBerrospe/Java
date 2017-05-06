@@ -4,16 +4,18 @@ public class Node {
 	Node parent=null;
 	private String state=null;
 	private int row=0, column=0;
+	private int hillClimbed=0;
 	private boolean[][] landscape=null;
 	private boolean reachedGoal=false;
 	private ArrayList<Node> children=null;
 	
 	
-	public Node(Node parent, String state, int row, int column, boolean landscape[][]) {
+	public Node(Node parent, String state, int row, int column, int hillClimbed, boolean landscape[][]) {
 		this.parent=parent;
 		this.state=state;
 		this.row=row;
 		this.column=column;
+		this.hillClimbed=hillClimbed;
 		this.landscape= new boolean[landscape.length][];
 		for(int i=0; i<landscape.length; i++)
 			this.landscape[i]=landscape[i].clone();
@@ -29,6 +31,9 @@ public class Node {
 
 	public int getColumn() {	return column;	}
 	public void setColumn(int column) {	this.column = column;	}
+	
+	public int getHill() {	return hillClimbed;	}
+	public void setHill(int hillClimbed) {	this.hillClimbed = hillClimbed;	}
 
 	public boolean[][] getLandscape() {	return landscape.clone();	}
 	public void setLandscape(boolean[][] landscape) {	this.landscape = landscape;	}
@@ -58,7 +63,7 @@ public class Node {
 			System.out.println(parent.state);
 		}
 		System.out.println("This: "+ state);
-		System.out.println("Position: "+ row + " " + column);
+		System.out.println("Position: "+ row + " " + column + "   Hill Climbed: "+hillClimbed);
 		for (int i = 0; i < Main.landscapeRow; i++) {
 			for (int j = 0; j < Main.landscapeColumn; j++) {
 				if (this.landscape[i][j]) {

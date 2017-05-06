@@ -3,7 +3,7 @@ import java.util.Stack;
 
 public class Main {
 	private Scanner input=new Scanner(System.in);
-	private int column=0, row=0;
+	private int column=0, row=0, hillClimbed=0;
 	private boolean[][] landscape=null;
 	public static int landscapeRow,landscapeColumn;
 	
@@ -34,6 +34,7 @@ public class Main {
 
 		
 		landscape[row][column]=true;
+		hillClimbed++;
 	}//setRobotPosition()
 	
 	public void setRobotPosition(int row, int column) {
@@ -65,7 +66,7 @@ public class Main {
 		setLandscapeSize();
 		setInitialRobotPosition();
 		Node n=null;
-		Tree tree = new Tree(row, column, landscape);
+		Tree tree = new Tree(row, column, hillClimbed, landscape);
 		while (n == null) {
 			n=tree.nextDepth();
 		}//while

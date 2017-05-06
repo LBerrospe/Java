@@ -7,10 +7,11 @@ public class Tree {
 	Node root=null;
 	Queue<Node> queue = new LinkedList<Node>();
 	Queue<Node> nextQueue = new LinkedList<Node>();
+	int maxHillClimbed=0;
 	Hashtable<String, Integer> states = new Hashtable<String, Integer>();
 	
-	public Tree(int row, int column, boolean[][] landscape) {
-		root = new Node(null, generateUniqueId(row, column, landscape), row, column, landscape);
+	public Tree(int row, int column, int hill, boolean[][] landscape) {
+		root = new Node(null, generateUniqueId(row, column, landscape), row, column, hill, landscape);
 		queue.add(root);
 	}//constructor
 	
@@ -58,16 +59,18 @@ public class Tree {
 			if (landscape[row][column]) {
 				String state=generateUniqueId(row, column, landscape);
 				if (isNewState(state)) {
-					return new Node(n, state, row, column, landscape);
+					return new Node(n, state, row, column, n.getHill(), landscape);
 				} else {
 					return null;
 				}//if{}else{}
 			} else {
+				
 				landscape[row][column]=true;
 				String state=generateUniqueId(row, column, landscape);
 				if (isNewState(state)) {
-					Node newNode = new Node(n, state, row, column, landscape);
+					Node newNode = new Node(n, state, row, column, n.getHill()+1, landscape);
 					landscape[row][column]=false;
+					maxHillClimbed=n.getHill()+1;
 					return newNode;
 				} else {
 					return null;
@@ -95,59 +98,36 @@ public class Tree {
 	}//generateUniqueId
 
 	public Node successorFunctionReachedGoal(Node node){
-		Node child=null;
-		System.out.println("------------------- \nSuccesorFunction of");
-		node.nodeToString();
-		System.out.println("-------------------");
+		if (node.isReachedGoal()) {
+			return node;
+		} else {
+			Node child[]= new Node[4];
 
-		if ((child = conditionActionRules(UP, node)) != null) {
-			System.out.println("UP ");
-			node.addChild(child);
-			nextQueue.add(child);
-			child.nodeToString();
-			if (child.isReachedGoal()) {
-				return child;
-			}//if{}
-		}//if{}
+			child[0]=conditionActionRules(UP, node);
+			child[1]=conditionActionRules(RIGHT,node);
+			child[2]=conditionActionRules(DOWN, node);
+			child[3]=conditionActionRules(LEFT, node);
+			for (int i=0; i < 4; i++) {
+				if (child[i] != null) {
+					if (child[i].getHill() == maxHillClimbed) {
+						node.addChild(child[i]);
+						nextQueue.add(child[i]);
+					}//if{}
+				}//if{}
+			}//for{}
+		}//if{}else{}
 		
-		if ((child = conditionActionRules(RIGHT,node)) != null) {
-			System.out.println("RIGHT ");
-			node.addChild(child);
-			nextQueue.add(child);
-			child.nodeToString();
-			if (child.isReachedGoal()) {
-				return child;
-			}//if{}
-		}//if{}
-		
-		if ((child = conditionActionRules(DOWN, node)) != null) {
-			System.out.println("DOWN ");
-			node.addChild(child);
-			nextQueue.add(child);
-			child.nodeToString();
-			if (child.isReachedGoal()) {
-				return child;
-			}//if{}
-		}//if{}
-		
-		if ((child = conditionActionRules(LEFT, node)) != null) {
-			System.out.println("LEFT ");
-			node.addChild(child);
-			nextQueue.add(child);
-			child.nodeToString();
-			if (child.isReachedGoal()) {
-				return child;
-			}//if{}
-		}//if{}
 		return null;
 	}//successorFunction
 	
 	public Node nextDepth() {
 		Node n=null;
-		while (!queue.isEmpty() && n == null) {
+		while (!queue.isEmpty()) {
 			n = successorFunctionReachedGoal(queue.remove());
 		}//while
-		queue = nextQueue;
+		while (!nextQueue.isEmpty()) {
+			queue.add(nextQueue.remove());
+		}
 		return n;
 	}//nextDepth
 

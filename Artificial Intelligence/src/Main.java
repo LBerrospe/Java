@@ -63,9 +63,9 @@ public class Main {
 	}//moveAgent
 	
 	public void start() {
+		Node n=null;
 		setLandscapeSize();
 		setInitialRobotPosition();
-		Node n=null;
 		Tree tree = new Tree(row, column, hillClimbed, landscape);
 		while (n == null) {
 			n=tree.nextDepth();
